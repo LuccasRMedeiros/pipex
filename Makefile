@@ -6,38 +6,72 @@
 #    By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/15 18:57:29 by lrocigno          #+#    #+#              #
-#    Updated: 2021/09/15 21:52:59 by lrocigno         ###   ########.fr        #
+#    Updated: 2021/09/17 19:30:18 by lrocigno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 define PIPEX
                                                 \::::     /::::
                                                  \::::   /::::
-          _____     __     _____     ________     \+:+: /:+:+
-         /  _  \   /  |   /  _  \   /  _____/      \:+:/:+:+
-        /  /_| |  /  /   /  /_| |  /  /__         /++++++++
-       /  _____/ /  /   /  _____/ /  ___/        /++++ \++++
-      /  /      /  /   /  /      /  /           /+#+#   \+#+#
-     /  /      /  /   /  /      /  /_____      /#+#+     \#+#+
-    |__/      |__/   |__/      |________/     /####       \####
+          _____     __     _____     _______      \+:+:/:+:+
+		 /  _  \   /  |   /  _  \   /  _____|      \:+:+:+:
+        /  /_| |  /  /   /  /_| |  /  /__         /++++++
+       /  _____/ /  /   /  _____/ /  ___/       /++++\++++
+      /  /      /  /   /  /      /  /          /+#+#  \+#+#
+     /  /      /  /   /  /      /  /_____    /#+#+     \#+#+
+    |__/      |__/   |__/      |________/   /####       \####
+
+ - Ready to pipe!
 endef
 export PIPEX
              
 NAME = pipex
 
-CC = clang
+CC = clang-13
 
 FLAGS = -Wall -Wextra -Werror -g
 
-LIBS = ./libs/libft/
+EX_RULE = all
 
-SRC = ./
+LIBS = -L ./libs/libft/ -lft \
+
+INCLUDES = -I ./libs/libft/ \
+
+SRC = pipex.c \
 
 OBJ = $(SRC:%.c=%.o)
 
-all:
+SRC_PATH = ./src/
 
-%.o: %.c
-	$(CC) $(FLAGS) -c $< -o $@
+OBJ_PATH = ./obj/
 
-$(NAME):
+SRC_FULL = $(addprefix $(SRC_PATH), $(SRC))
+
+OBJ_FULL = $(addprefix $(OBJ_PATH), $(OBJ))
+
+all: makelibft objdir $(NAME)
+	echo "$$PIPEX"
+
+$(OBJ_FULL): $(SRC_FULL)
+	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+
+$(NAME): $(OBJ_FULL)
+	$(CC) $(FLAGS) -o $(NAME) $(OBJ_FULL) $(LIBS)
+
+clean: RULE = clean
+
+clean: makelibft
+	rm -rf $(OBJ_PATH)
+
+fclean: RULE = fclean
+
+fclean: makelibft clean
+	rm -f $(NAME)
+
+re: fclean all
+
+objdir:
+	mkdir -p $(OBJ_PATH)
+
+makelibft:
+	make --no-print-directory -C ./libs/libft/ $(RULE)
