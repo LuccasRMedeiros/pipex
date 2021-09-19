@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_error_do_nothing.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/14 15:36:13 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/09/18 11:17:47 by lrocigno         ###   ########.fr       */
+/*   Created: 2021/09/18 11:00:33 by lrocigno          #+#    #+#             */
+/*   Updated: 2021/09/18 11:06:16 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
-#include "pipex_error/pipex_error.h"
+#include "pipex_error.h"
 
-/* 
-** Main function.
+/*
+** Receive an indefinit number of arguments and do nothing, acting as a
+** placeholder.
+** The need for variadic, is to avoid warnings and grant compilation during
+** development fase. This function is not meant to be kept in the code when
+** released.
 */
 
-int	main(int argc, char **argv)
+void	do_nothing(int n_args, ...)
 {
-	char	**fargv;
-	char	**env;
+	va_list	keeper;
 
-	do_nothing(argc, *argv);
-	fargv = ft_split("testingtester ", ' ');
-	execve("echo", fargv, env);
-	ft_destroyer((void **)fargv);
-	return (0);
+	va_start(keeper, n_args);
+	va_end(keeper);
 }
