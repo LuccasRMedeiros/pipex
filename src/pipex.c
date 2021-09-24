@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lrocigno <lrocigno@student.42.org>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 15:36:13 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/09/18 11:17:47 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/09/23 22:43:41 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,5 @@
 
 int	main(int argc, char **argv)
 {
-	char	**fargv;
-	char	**env;
 
-	do_nothing(argc, *argv);
-	fargv = ft_split("testingtester ", ' ');
-	execve("echo", fargv, env);
-	ft_destroyer((void **)fargv);
-	return (0);
 }

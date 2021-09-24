@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+         #
+#    By: lrocigno <lrocigno@student.42.org>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/15 18:57:29 by lrocigno          #+#    #+#              #
-#    Updated: 2021/09/19 08:41:45 by lrocigno         ###   ########.fr        #
+#    Updated: 2021/09/23 21:32:14 by lrocigno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 define PIPEX
-                                                \::::     /::::
+                                                \ - -     / - -
                                                  \::::   /::::
           _____     __     _____     _______      \+:+:/:+:+
          /  _  \   /  |   /  _  \   /  _____|      \:+:+:+:
@@ -24,7 +24,21 @@ define PIPEX
  - Ready to pipe!
 endef
 export PIPEX
-             
+
+define GREAT_COMMOTION
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+	int strs;
+
+	for (strs = 0; argv[strs] != NULL && strs < argc; ++strs) {
+		printf("you argumented: %s\\n", argv[strs]);
+	}
+	return (0);
+}
+endef
+export GREAT_COMMOTION
+
 NAME = pipex
 
 CC = clang-13
@@ -49,11 +63,13 @@ SRC_FULL = $(addprefix $(SRC_PATH), $(SRC))
 
 OBJ_FULL = $(addprefix $(OBJ_PATH), $(OBJ))
 
+all: RULE = all
+
 all: makelibft objdir $(NAME)
 	echo "$$PIPEX"
 
 $(NAME): $(OBJ_FULL)
-	$(CC) $(FLAGS) ./src/pipex.c -o $(NAME) $(OBJ_FULL) $(LIBS)
+	$(CC) $(FLAGS) $(INCLUDES) ./src/pipex.c -o $(NAME) $(OBJ_FULL) $(LIBS)
 
 $(OBJ_FULL): $(SRC_FULL)
 	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
@@ -62,17 +78,20 @@ clean: RULE = clean
 
 clean: makelibft
 	rm -rf $(OBJ_PATH)
+	rm -f great_commotion.c
+	rm -f great_commotion
 
-fclean: RULE = fclean
-
-fclean: makelibft clean
+fclean: clean
+	rm -f ./libs/libft/libft.a
 	rm -f $(NAME)
 
-re:
-	rm -rf $(OBJ_PATH)
-	rm -f $(NAME)
+re: RULE = re
 
-re: all
+re: fclean makelibft all
+
+debug:
+	echo "$$GREAT_COMMOTION" > great_commotion.c
+	$(CC) $(FLAGS) great_commotion.c -o great_commotion
 
 objdir:
 	mkdir -p $(OBJ_PATH)
@@ -80,3 +99,4 @@ objdir:
 
 makelibft:
 	make --no-print-directory -C ./libs/libft/ $(RULE)
+
