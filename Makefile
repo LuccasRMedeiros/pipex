@@ -6,7 +6,7 @@
 #    By: lrocigno <lrocigno@student.42.org>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/15 18:57:29 by lrocigno          #+#    #+#              #
-#    Updated: 2021/10/03 17:03:39 by lrocigno         ###   ########.fr        #
+#    Updated: 2021/10/09 01:27:29 by lrocigno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,12 @@ int	main(int argc, char **argv)
 {
 	int	strs;
 
-	while (strs = 0; argv[strs] != NULL && strs < argc; ++strs)
+	strs = 0;
+	while (argv[strs] != NULL && strs < argc)
+	{
 		printf("you argumented: %s\\n", argv[strs]);
+		++strs;
+	}
 	return (0);
 }
 endef
@@ -51,17 +55,17 @@ LIBS = -L ./libs/libft/ -lft \
 
 INCLUDES = -I ./libs/libft/ \
 
-SRC =
+SRC_DIR = ./src/
+
+OBJ_DIR = ./obj/
+
+SRC = pipex_utils/pipex_utils_parse_cmd.c
 
 OBJ = $(SRC:%.c=%.o)
 
-SRC_PATH = ./src/
+SRC_FULL = $(addprefix $(SRC_DIR), $(SRC))
 
-OBJ_PATH = ./obj/
-
-SRC_FULL = $(addprefix $(SRC_PATH), $(SRC))
-
-OBJ_FULL = $(addprefix $(OBJ_PATH), $(OBJ))
+OBJ_FULL = $(addprefix $(OBJ_DIR), $(OBJ))
 
 all: makelibft cdir $(NAME)
 	echo "$$PIPEX"
@@ -80,7 +84,7 @@ clean:
 
 fclean: clean
 	rm -f ./libs/libft/libft.a
-	rm -rf $(BIN_PATH)
+	rm -f $(NAME)
 
 re: fclean all
 
@@ -89,7 +93,8 @@ debug:
 	$(CC) $(FLAGS) great_commotion.c -o great_commotion
 
 cdir:
-	mkdir -p $(OBJ_PATH)
+	mkdir -p $(OBJ_DIR)
+	mkdir -p $(OBJ_DIR)pipex_utils/
 
 makelibft:
 	make -C ./libs/libft/ all
