@@ -6,7 +6,7 @@
 /*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 21:54:58 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/21 18:59:14 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/23 01:59:20 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,14 @@
 #ifndef PIPEX_ERROR_H
 # define PIPEX_ERROR_H
 
+# include "../pipex/pipex.h"
+
 # include <stdio.h>
 # include <string.h>
 # include <unistd.h>
 # include <libft.h>
 
 pid_t	pipex_error_fork(void);
+void	pipex_error_check_query(t_query *query, int n_cmds);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 15:36:13 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/22 00:52:20 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/23 01:59:20 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 ** and because of this behavior, we need to wait the child terminates.
 */
 
-static void parent(int fd, char **argv, char **env, pid_t child_pid)
+static void parent(t_query *query, pid_t child_pid)
 {
 	//TODO
 	waitpid(child_pid);
@@ -33,7 +33,7 @@ static void parent(int fd, char **argv, char **env, pid_t child_pid)
 ** Child execute the first command in query.
 */
 
-static void child(int fd, char **argv, char **env)
+static void child(t_query *query)
 {
 	//TODO
 	pipex_utils_redir(fd, STDIN_FILENO)
@@ -61,7 +61,10 @@ int	main(int argc, char **argv, char **env)
 	t_query		*query;
 	pid_t		child_pid;
 
-	fds = pipex_set_fds();
+	ft_bzero(query, 1);
+	query->header = pipex_utils_set_header(envp);
+	query->cmds = pipex_utils_set_cmds(argc, argv, envp[3]);
+	pipex_error_check_query(query, argc - 2);
 	child_pid = pipex_error_fork();
 	if (!child_pid)
 	{
