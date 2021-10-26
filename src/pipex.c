@@ -6,7 +6,7 @@
 /*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 15:36:13 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/23 01:59:20 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/26 01:53:20 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@
 
 static void parent(t_query *query, pid_t child_pid)
 {
-	//TODO
 	waitpid(child_pid);
-	return ;
+	pipex_utils_redir(query->header.fd[0], STDOUT_FILENO);
+	close(query->header.fds[1]);
+	pipex_error_try_execve(query, 1);
+	del_query(query);
 }
 
 /*
@@ -35,9 +37,11 @@ static void parent(t_query *query, pid_t child_pid)
 
 static void child(t_query *query)
 {
-	//TODO
-	pipex_utils_redir(fd, STDIN_FILENO)
-	return ;
+	pipex_utils_redir(query->header.fd[1], STDIN_FILENO);
+	close(query->header.fd[0]);
+	pipex_error_try_execve(query, 0);
+	del_query(query);
+	exit(0);
 }
 
 /* 
@@ -56,22 +60,20 @@ static void child(t_query *query)
 ** can identify who's the parent process and who's the child process.
 */
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **envp)
 {
 	t_query		*query;
 	pid_t		child_pid;
 
-	ft_bzero(query, 1);
-	query->header = pipex_utils_set_header(envp);
-	query->cmds = pipex_utils_set_cmds(argc, argv, envp[3]);
+	query = new_query(argc - 2, envp);
+	pipex_utils_set_cmds(query);
 	pipex_error_check_query(query, argc - 2);
+	query->header.fd_in = pipex_error_try_open(argv[0], O_RDONLY, 0);
+	query->header.fd_out = pipex_error_try_open(argv[argc - 1],
+			O_CREATE | O_RDWR | O_TRUNC, 0);
 	child_pid = pipex_error_fork();
 	if (!child_pid)
-	{
-		child_pid = pipex_error_fork();
-		parent(fds[0], argv, env, child_pid);
-	}
-	if (!child_pid)
-		child(fd[1], argv, env);
+		child(query);
+	parent(query, child_pid);
 	return (0);
 }

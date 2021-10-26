@@ -6,7 +6,7 @@
 /*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 21:54:58 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/23 01:59:20 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/26 01:53:20 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,7 @@
 
 pid_t	pipex_error_fork(void);
 void	pipex_error_check_query(t_query *query, int n_cmds);
+void	pipex_error_try_execve(t_query *query, int p);
+int		pipex_error_try_open(char *pathname, int flags, int mode);
 
 #endif

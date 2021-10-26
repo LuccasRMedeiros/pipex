@@ -6,7 +6,7 @@
 /*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:07:13 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/22 23:34:51 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/23 13:29:54 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,15 @@ static char	*chose_path(char *cmd, char *path)
 ** NOTE: 
 */
 
-t_cmd	*pipex_utils_set_cmds(int argc, char **argv, char *path)
+void	pipex_utils_set_cmds(t_query *query, char **argv, char *path)
 {
-	int		hm;
-	t_cmd	*cmds;
 	int		i;
 
-	hm = argc - 2;
-	cmds = malloc(sizeof(*cmds) * hm + 1);
-	if (!cmds)
-		exit(0);
 	i = 0;
-	while (i < hm)
+	while (query->cmds[i])
 	{
-		cmds[i]->argv = ft_split(argv[i + 1], ' ');
-		cmds[i]->cmd = chose_path(cmds[i].argv[0], path);
+		query->cmds[i].argv = ft_split(argv[i + 1], ' ');
+		query->cmds[i].cmd = chose_path(cmds[i].argv[0], path);
 		++i;
 	}
 	cmds[i] = NULL;
