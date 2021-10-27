@@ -6,20 +6,20 @@
 #    By: lrocigno <lrocigno@student.42.org>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/15 18:57:29 by lrocigno          #+#    #+#              #
-#    Updated: 2021/10/09 01:27:29 by lrocigno         ###   ########.fr        #
+#    Updated: 2021/10/27 18:14:04 by lrocigno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 define PIPEX
-                                                \ - -     / - -
-                                                 \::::   /::::
-          _____     __     _____     _______      \+:+:/:+:+
-         /  _  \   /  |   /  _  \   /  _____|      \:+:+:+:
-        /  /_| |  /  /   /  /_| |  /  /__         /++++++
-       /  _____/ /  /   /  _____/ /  ___/       /++++\++++
-      /  /      /  /   /  /      /  /          /+#+#  \+#+#
-     /  /      /  /   /  /      /  /_____    /#+#+     \#+#+
-    |__/      |__/   |__/      |________/   /####       \####
+                                                \ + +     / + +
+                                                 \++++   /++++
+          _____     __     _____     _______      \+x+x/x+x+
+         /  _  \   /  |   /  _  \   /  _____|      \+x+x+x+
+        /  /_| |  /  /   /  /_| |  /  /__         /xxxxxx
+       /  _____/ /  /   /  _____/ /  ___/       /xxxx\xxxx
+      /  /      /  /   /  /      /  /          /xXxX  \XxXx
+     /  /      /  /   /  /      /  /_____    /XxXx     \XxXx
+    |__/      |__/   |__/      |________/   /XXXX       \XXXX
 
  - Ready to pipe!
 endef
@@ -47,38 +47,50 @@ NAME = pipex
 
 CC = clang-13
 
-FLAGS = -Wall -Wextra -Werror -g
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 EX_RULE = all
 
 LIBS = -L ./libs/libft/ -lft \
 
 INCLUDES = -I ./libs/libft/ \
+		   -I ./src/ \
+		   -I ./error/ \
+		   -I ./utils/ \
 
-SRC_DIR = ./src/
+BASE =	new_query.c \
+		del_query.c \
 
-OBJ_DIR = ./obj/
+ERROR =	pipex_error_check_query.c \
+		pipex_error_check_argc.c \
+		pipex_error_try_fork.c \
+		pipex_error_try_execve.c \
+		pipex_error_try_open.c \
 
-SRC = pipex_utils/pipex_utils_parse_cmd.c
+UTILS =	pipex_utils_parse_cmd.c \
+		pipex_utils_redir.c \
+		pipex_utils_set_cmds.c \
+
+SRC = $(BASE) $(ERROR) $(UTILS)
 
 OBJ = $(SRC:%.c=%.o)
 
-SRC_FULL = $(addprefix $(SRC_DIR), $(SRC))
+SRC_FULL = $(addprefix ./src/, $(BASE)) \
+		   $(addprefix ./error/, $(ERROR)) \
+		   $(addprefix ./utils/, $(UTILS)) \
 
-OBJ_FULL = $(addprefix $(OBJ_DIR), $(OBJ))
-
-all: makelibft cdir $(NAME)
+all: makelibft $(NAME)
 	echo "$$PIPEX"
 
-$(NAME): $(OBJ_FULL)
-	$(CC) $(FLAGS) $(INCLUDES) ./src/pipex.c -o $(NAME) $(OBJ_FULL) $(LIBS)
+$(NAME): $(OBJ)
+	$(CC) $(FLAGS) $(INCLUDES) pipex.c -o $(NAME) $(OBJ) $(LIBS)
 
-$(OBJ_FULL): $(SRC_FULL)
-	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
+$(OBJ): $(SRC_FULL)
+	$(CC) $(FLAGS) $(INCLUDES) -c $(SRC_FULL)
 
 clean:
 	make -C ./libs/libft/ clean
-	rm -rf $(OBJ_PATH)
+	rm -f *.o
 	rm -f great_commotion.c
 	rm -f great_commotion
 
@@ -91,10 +103,6 @@ re: fclean all
 debug:
 	echo "$$GREAT_COMMOTION" > great_commotion.c
 	$(CC) $(FLAGS) great_commotion.c -o great_commotion
-
-cdir:
-	mkdir -p $(OBJ_DIR)
-	mkdir -p $(OBJ_DIR)pipex_utils/
 
 makelibft:
 	make -C ./libs/libft/ all

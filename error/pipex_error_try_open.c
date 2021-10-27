@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_error_try_open.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 20:31:59 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/26 01:53:20 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/27 13:45:47 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	pipex_error_try_open(char *pathname, int flags, mode_t mode)
 		ret_fd = open(pathname, flags);
 	if (ret_fd < 0)
 	{
-		perror("Problem with the informed file\n");
+		perror("Problem with the informed file");
 		exit(0);
 	}
 	return (ret_fd);

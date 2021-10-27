@@ -1,29 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils_parse_env.c                            :+:      :+:    :+:   */
+/*   pipex_error_check_argc.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/20 15:11:02 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/20 19:26:39 by lrocigno         ###   ########.fr       */
+/*   Created: 2021/10/27 17:54:06 by lrocigno          #+#    #+#             */
+/*   Updated: 2021/10/27 18:08:28 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_utils.h"
+#include "pipex_error.h"
 
 /*
-** Get the PATH inside the envp and return a char **.
+** Check if the argc is equal to 5 what means that were informed two files and
+** two commands.
 **
-** In case of error it will exit silently with 0.
+** Case argc is different of 5, print a error messsage, before to exit with
+** zero.
 */
 
-char	**pipex_utils_parse_env(char **env)
+void	pipex_error_check_argc(int argc)
 {
-	char **ret_env;
-
-	ret_env = ft_split(env, ':');
-	if (!ret_env)
+	if (argc != 5)
+	{
+		ft_fprintf(2, "Please inform 'file cmd cmd file'\n");
 		exit(0);
-	return (ret_env);
+	}
 }

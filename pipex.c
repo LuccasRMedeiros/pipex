@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 15:36:13 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/26 01:53:20 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/27 18:05:48 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-#include "pipex_utils/pipex_utils.h"
-#include "pipex_error/pipex_error.h"
+#include <pipex_utils.h>
+#include <pipex_error.h>
 
 /*
 ** Parent execute the last command in query.
@@ -24,9 +25,12 @@
 
 static void parent(t_query *query, pid_t child_pid)
 {
-	waitpid(child_pid);
-	pipex_utils_redir(query->header.fd[0], STDOUT_FILENO);
-	close(query->header.fds[1]);
+	int	status;
+
+	waitpid(child_pid, &status, 0);
+	pipex_utils_redir(query->fd_out, STDOUT_FILENO);
+	pipex_utils_redir(query->fds[0], STDIN_FILENO);
+	close(query->fds[1]);
 	pipex_error_try_execve(query, 1);
 	del_query(query);
 }
@@ -37,8 +41,9 @@ static void parent(t_query *query, pid_t child_pid)
 
 static void child(t_query *query)
 {
-	pipex_utils_redir(query->header.fd[1], STDIN_FILENO);
-	close(query->header.fd[0]);
+	pipex_utils_redir(query->fd_in, STDIN_FILENO);
+	pipex_utils_redir(query->fds[1], STDOUT_FILENO);
+	close(query->fds[0]);
 	pipex_error_try_execve(query, 0);
 	del_query(query);
 	exit(0);
@@ -65,13 +70,14 @@ int	main(int argc, char **argv, char **envp)
 	t_query		*query;
 	pid_t		child_pid;
 
-	query = new_query(argc - 2, envp);
-	pipex_utils_set_cmds(query);
-	pipex_error_check_query(query, argc - 2);
-	query->header.fd_in = pipex_error_try_open(argv[0], O_RDONLY, 0);
-	query->header.fd_out = pipex_error_try_open(argv[argc - 1],
-			O_CREATE | O_RDWR | O_TRUNC, 0);
-	child_pid = pipex_error_fork();
+	pipex_error_check_argc(argc);
+	query = new_query(argc - 3);
+	pipex_utils_set_cmds(query, argv + 2, envp);
+	pipex_error_check_query(query);
+	query->fd_in = pipex_error_try_open(argv[1], O_RDONLY, 0);
+	query->fd_out = pipex_error_try_open(argv[argc - 1],
+			O_CREAT | O_RDWR | O_TRUNC, 0644);
+	child_pid = pipex_error_try_fork();
 	if (!child_pid)
 		child(query);
 	parent(query, child_pid);

@@ -1,14 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_error_fork.c                                 :+:      :+:    :+:   */
+/*   pipex_error_try_fork.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/21 18:27:31 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/21 18:59:14 by lrocigno         ###   ########.fr       */
+/*   Created: 2021/10/26 22:53:51 by lrocigno          #+#    #+#             */
+/*   Updated: 2021/10/27 13:45:42 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "pipex_error.h"
 
 /*
 ** Protect the program against an error while forking the process.
@@ -18,16 +20,14 @@
 ** then exit the program.
 */
 
-#include "pipex_error"
-
-pid_t	pipex_error_fork(void)
+pid_t	pipex_error_try_fork(void)
 {
 	pid_t	ret;
 
 	ret = fork();
 	if (ret < 0)
 	{
-		perror("Pipex error on fork:");
+		perror("Problem while forking");
 		exit(0);
 	}
 	return (ret);

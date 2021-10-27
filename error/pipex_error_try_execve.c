@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_error_try_execve.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 19:13:09 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/25 20:26:56 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/27 16:09:57 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 ** then exit the program with 0.
 */
 
-void	pipex_error_try_execve(t_query *query, int p)
+int	pipex_error_try_execve(t_query *query, int p)
 {
-	if (execve(query->cmds[p].cmd, query->cmds[p].argv, query->header.envp) < 0)
+	if (execve(query->list_cmds[p], query->list_argvs[p], query->envp) < 0)
 	{
-		perror("Pipex error:");
-		exit(2);
+		perror("Problem when attempt to execute new task");
+		del_query(query);
+		exit(-1);
 	}
+	return (1);
 }

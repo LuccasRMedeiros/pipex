@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_error_check_query.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 00:18:37 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/23 01:59:20 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/27 14:36:53 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@
 ** program with 0.
 */
 
-void	pipex_error_check_query(t_query *query, int n_cmds)
+void	pipex_error_check_query(t_query *query)
 {
 	int	i;
 
 	i = 0;
-	while (i < n_cmds)
+	while (i < query->cmdc)
 	{
-		if (!query->cmds->cmd)
+		if (!query->list_cmds[i])
 		{
-			access(cmds->argv[0], F_OK);
-			perror("Problem with commands:");
+			access(query->list_argvs[i][0], X_OK);
+			perror("Problem with commands");
 			del_query(query);
 			exit (0);
 		}
