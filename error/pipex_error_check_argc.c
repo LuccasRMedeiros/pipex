@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_error_check_argc.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/27 17:54:06 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/27 18:08:28 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/27 20:28:17 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	pipex_error_check_argc(int argc)
 {
 	if (argc != 5)
 	{
-		ft_fprintf(2, "Please inform 'file cmd cmd file'\n");
+		perror("Please inform 'file cmd cmd file'");
 		exit(0);
 	}
 }
