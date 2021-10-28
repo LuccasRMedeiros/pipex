@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_error.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lrocigno <lrocigno@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 21:54:58 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/27 18:05:48 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/28 11:27:00 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@
 # include <pipex.h>
 # include <errno.h>
 
-void	pipex_error_check_query(t_query *query);
-void	pipex_error_check_argc(int argc);
 pid_t	pipex_error_try_fork(void);
 int		pipex_error_try_execve(t_query *query, int p);
 int		pipex_error_try_open(char *pathname, int flags, mode_t mode);

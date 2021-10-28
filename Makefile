@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lrocigno <lrocigno@student.42.org>         +#+  +:+       +#+         #
+#    By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/15 18:57:29 by lrocigno          #+#    #+#              #
-#    Updated: 2021/10/27 18:14:04 by lrocigno         ###   ########.fr        #
+#    Updated: 2021/10/28 11:33:12 by lrocigno         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,24 +24,6 @@ define PIPEX
  - Ready to pipe!
 endef
 export PIPEX
-
-define GREAT_COMMOTION
-#include <stdio.h>
-
-int	main(int argc, char **argv)
-{
-	int	strs;
-
-	strs = 0;
-	while (argv[strs] != NULL && strs < argc)
-	{
-		printf("you argumented: %s\\n", argv[strs]);
-		++strs;
-	}
-	return (0);
-}
-endef
-export GREAT_COMMOTION
 
 NAME = pipex
 
@@ -61,9 +43,7 @@ INCLUDES = -I ./libs/libft/ \
 BASE =	new_query.c \
 		del_query.c \
 
-ERROR =	pipex_error_check_query.c \
-		pipex_error_check_argc.c \
-		pipex_error_try_fork.c \
+ERROR =	pipex_error_try_fork.c \
 		pipex_error_try_execve.c \
 		pipex_error_try_open.c \
 
@@ -91,8 +71,6 @@ $(OBJ): $(SRC_FULL)
 clean:
 	make -C ./libs/libft/ clean
 	rm -f *.o
-	rm -f great_commotion.c
-	rm -f great_commotion
 
 fclean: clean
 	rm -f ./libs/libft/libft.a
@@ -100,11 +78,7 @@ fclean: clean
 
 re: fclean all
 
-debug:
-	echo "$$GREAT_COMMOTION" > great_commotion.c
-	$(CC) $(FLAGS) great_commotion.c -o great_commotion
-
 makelibft:
 	make -C ./libs/libft/ all
 
-.PHONY: all clean debuig fclean makelibft cdir re
+.PHONY: all clean fclean makelibft re

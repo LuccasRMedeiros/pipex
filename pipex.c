@@ -6,7 +6,7 @@
 /*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 15:36:13 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/27 18:05:48 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/28 11:26:44 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,18 @@ int	main(int argc, char **argv, char **envp)
 	t_query		*query;
 	pid_t		child_pid;
 
-	pipex_error_check_argc(argc);
+	if (argc != 5)
+		exit(0);
 	query = new_query(argc - 3);
 	pipex_utils_set_cmds(query, argv + 2, envp);
-	pipex_error_check_query(query);
 	query->fd_in = pipex_error_try_open(argv[1], O_RDONLY, 0);
 	query->fd_out = pipex_error_try_open(argv[argc - 1],
 			O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (query->fd_in < 0 || query->fd_out < 0)
+	{
+		del_query(query);
+		exit(0);
+	}
 	child_pid = pipex_error_try_fork();
 	if (!child_pid)
 		child(query);

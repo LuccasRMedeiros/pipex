@@ -6,7 +6,7 @@
 /*   By: lrocigno <lrocigno@student.42sp.org>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/22 17:07:13 by lrocigno          #+#    #+#             */
-/*   Updated: 2021/10/27 11:54:14 by lrocigno         ###   ########.fr       */
+/*   Updated: 2021/10/28 11:21:46 by lrocigno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,31 @@ static char	*find_path_var(char **envp)
 ** Try to access the command through every path in PATH environment variable.
 ** The one that works is returned. Case none of them works, returns NULL, is
 ** responsability of the caller of set_cmds to deal with the error.
+**
+** When the command does not exist (access() don't find the command with the
+** paths) it return aux_cmd. aux_cmd is a duplication of cmd, and it exist for
+** to alloc memory for this string, allowing the program to delete it properly
+** in the unavoidable error.
 */
 
 static char	*chose_path(char *cmd, char *path)
 {
 	char	**paths;
 	int		path_i;
+	char	*aux_cmd;
 	char	*try_path;
 
 	paths = ft_split(path, ':');
 	path_i = 0;
+	aux_cmd = ft_strdup(cmd);
 	while (paths[path_i])
 	{
 		try_path = ft_strjoin(paths[path_i], "/");
 		try_path = ft_reallocncat(try_path, cmd);
 		if (!access(try_path, F_OK))
 		{
+			free(aux_cmd);
+			aux_cmd = NULL;
 			ft_destroyer((void **)paths);
 			return (try_path);
 		}
@@ -60,7 +69,7 @@ static char	*chose_path(char *cmd, char *path)
 		++path_i;
 	}
 	ft_destroyer((void **)paths);
-	return (NULL);
+	return (aux_cmd);
 }
 
 /*
