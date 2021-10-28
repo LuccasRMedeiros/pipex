@@ -4,8 +4,8 @@ A REALLY simple pipe like program.
 
 # Table of contents
 
-[Introduction] \
-[Usage of pipex]
+[Introduction](#introduction) \
+[Usage of pipex](#usage-of-pipex)
 
 ## Introduction
 
