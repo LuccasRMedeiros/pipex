@@ -49,7 +49,6 @@ It act like '< infile cmd | cmd > outfile' stritcly, so the pipex require at lea
 EXISTING READABLE input file, the maximum of two commands, and the output file name,
 that can be an existing file (and have writing permission to the current user) or just
 a desired file. The syntax to use the pipex is "./pipex infile "cmd1 itsargs" "cmd2 itsargs" outfile",
-more commands, or no commands at all, will generate an error message printed to stderr
-file descriptor. \
-To clarify, "itsargs" mentioned above are the arguments required for the command, for
+with more commands, or no commands at all, pipex will terminate without processing anything. \
+NOTE.: "itsargs" mentioned above are the arguments required for the command, for
 example, for "ls" it could be "ls -l".
