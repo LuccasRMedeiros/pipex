@@ -9,7 +9,7 @@ A REALLY simple pipe like program.
 
 ## Introduction
 
-The objective of this project is to pipe to commands in order to generate a 
+The objective of this project is to pipe two commands in order to generate a 
 output file. To achieve this we can use pipe(). \
 [pipe()](https://man7.org/linux/man-pages/man2/pipe.2.html) will link two file descriptors and set a pointer to int (fds)
 with these ends values. After this what is written on one end is visible to
